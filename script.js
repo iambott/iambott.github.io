@@ -14,7 +14,7 @@ function sendMessage() {
     // Display AI response
     var aiMessage = document.createElement("p");
     aiMessage.classList.add("ai-message");
-    aiMessage.textContent = "AI: " + aiResponse;
+    aiMessage.textContent = "AI: " + aiResponse; // Make sure AI response is displayed
     document.getElementById("chat-box").appendChild(aiMessage);
 
     // Scroll to bottom of chat box
