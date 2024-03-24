@@ -1,45 +1,46 @@
 function sendMessage() {
-    var userInput = document.getElementById("user-input").value;
-    document.getElementById("user-input").value = "";
+    const chatBox = document.getElementById("chat-box");
+    let userInput = document.getElementById("user-input").value.trim();
+    if (userInput === "") return; // Do not send empty messages
+    
+    displayMessage(chatBox, userInput, 'user');
 
-    // Display user message
-    var userMessage = document.createElement("p");
-    userMessage.classList.add("user-message");
-    userMessage.textContent = "You: " + userInput;
-    document.getElementById("chat-box").appendChild(userMessage);
+    // Simulate AI response delay
+    setTimeout(() => {
+        let aiResponse = getAIResponse(userInput);
+        displayMessage(chatBox, aiResponse, 'ai');
+    }, 500); // Simulate a slight delay in AI response
+    
+    document.getElementById("user-input").value = ""; // Clear input field after sending
+}
 
-    // Get AI response (replace with your own logic)
-    var aiResponse = getAIResponse(userInput);
-
-    // Display AI response
-    var aiMessage = document.createElement("p");
-    aiMessage.classList.add("ai-message");
-    aiMessage.textContent = "AI: " + aiResponse; // Make sure AI response is displayed
-    document.getElementById("chat-box").appendChild(aiMessage);
+function displayMessage(chatBox, message, sender) {
+    let messageElement = document.createElement("div");
+    messageElement.classList.add("message", sender);
+    messageElement.textContent = message;
+    chatBox.appendChild(messageElement);
 
     // Scroll to bottom of chat box
-    document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 // Dummy function to get AI response (replace with your own logic)
 function getAIResponse(userInput) {
     // Dummy AI responses
-    var responses = {
-        "hi": "Hello!",
-        "how are you": "I'm doing well, thank you!",
-        "bye": "Goodbye!",
-        "default": "I'm not sure how to respond to that."
-    };
+    const responses = new Map([
+        ["hi", "Hello!"],
+        ["how are you", "I'm good, thank you! How about you?"],
+        ["bye", "Goodbye! Talk to you later."],
+        ["default", "Sorry, I didn't understand that."]
+    ]);
 
     userInput = userInput.toLowerCase();
 
-    // Check if userInput matches any key in responses
-    for (var key in responses) {
+    for (let [key, value] of responses) {
         if (userInput.includes(key)) {
-            return responses[key];
+            return value;
         }
     }
 
-    // If no match is found, return default response
-    return responses["default"];
+    return responses.get("default");
 }
