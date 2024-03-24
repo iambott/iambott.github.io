@@ -14,8 +14,13 @@
     </div>
     <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
     <button onclick="sendMessage()">Send</button>
+    <div id="mode-toggle" onclick="toggleDarkMode()">
+        <img id="mode-icon" src="light-mode-icon.svg" alt="Light mode icon">
+    </div>
 
     <script>
+        let darkMode = false;
+
         function sendMessage() {
             const userInput = document.getElementById("userInput").value;
             displayUserMessage(userInput);
@@ -83,9 +88,6 @@
                     return "Hello, how can I assist you?";
                 case userInput.toLowerCase().includes("how are you"):
                     return "I'm doing well, thank you for asking!";
-                case userInput.toLowerCase().includes("dark mode"):
-                    toggleDarkMode();
-                    return "Dark mode toggled!";
                 case userInput.match(/what is \d+ [+\-*\/] \d+/):
                     try {
                         const calculation = userInput.match(/(\d+) ([+\-*\/]) (\d+)/);
@@ -119,7 +121,15 @@
         }
 
         function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
+            darkMode = !darkMode;
+            const modeIcon = document.getElementById("mode-icon");
+            if (darkMode) {
+                modeIcon.src = "dark-mode-icon.svg";
+                document.body.classList.add("dark-mode");
+            } else {
+                modeIcon.src = "light-mode-icon.svg";
+                document.body.classList.remove("dark-mode");
+            }
         }
     </script>
 </body>
