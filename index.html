@@ -5,131 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Chatbot</title>
     <style>
-        /* CSS styles remain unchanged */
+        /* Your CSS styles here */
     </style>
 </head>
 <body>
-    <div id="chatbox">
-        <!-- Chat messages will be displayed here -->
-    </div>
-    <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
-    <button onclick="sendMessage()">Send</button>
-    <div id="mode-toggle" onclick="toggleDarkMode()">
-        <img id="mode-icon" src="light-mode-icon.svg" alt="Light mode icon">
+    <div id="chat-container">
+        <div id="chatbox">
+            <!-- Chat messages will be displayed here -->
+        </div>
+        <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+        <div id="mode-toggle" onclick="toggleDarkMode()">
+            Toggle Dark Mode
+        </div>
     </div>
 
     <script>
         let darkMode = false;
 
-        function sendMessage() {
+        function getUserInput() {
             const userInput = document.getElementById("userInput").value;
-            displayUserMessage(userInput);
             document.getElementById("userInput").value = "";
+            return userInput;
+        }
 
-            setTimeout(() => {
-                displayTypingIndicator();
-                setTimeout(() => {
-                    const aiResponse = getAIResponse(userInput);
-                    hideTypingIndicator();
-                    displayBotMessage(aiResponse);
-                }, 1500);
-            }, 500);
+        function handleUserMessage(userInput) {
+            displayUserMessage(userInput);
+            displayTypingIndicator();
+            setTimeout(() => getAndDisplayAIResponse(userInput), 1500);
+        }
+
+        function getAndDisplayAIResponse(userInput) {
+            const aiResponse = getAIResponse(userInput);
+            hideTypingIndicator();
+            displayBotMessage(aiResponse);
+        }
+
+        function sendMessage() {
+            const userInput = getUserInput();
+            handleUserMessage(userInput);
         }
 
         function handleKeyPress(event) {
-            if (event.keyCode === 13) { // Enter key
+            if (event.key === "Enter") {
                 sendMessage();
             }
         }
 
         function displayUserMessage(message) {
-            const messageElement = createMessageElement("You", message, "user-message");
-            document.getElementById("chatbox").appendChild(messageElement);
-            scrollChatbox();
+            // Function to display user message
         }
 
         function displayBotMessage(message) {
-            const messageElement = createMessageElement("Bot", message, "bot-message");
-            document.getElementById("chatbox").appendChild(messageElement);
-            scrollChatbox();
-        }
-
-        function createMessageElement(sender, message, className) {
-            const messageElement = document.createElement("div");
-            messageElement.classList.add("message");
-            messageElement.classList.add(className);
-            messageElement.textContent = `${sender}: ${message}`;
-            return messageElement;
+            // Function to display bot message
         }
 
         function displayTypingIndicator() {
-            const typingIndicator = document.createElement("div");
-            typingIndicator.classList.add("message");
-            typingIndicator.classList.add("bot-message");
-            typingIndicator.innerHTML = "Bot: <span class='typing-indicator'><span class='typing-dot'></span><span class='typing-dot'></span><span class='typing-dot'></span></span>";
-            document.getElementById("chatbox").appendChild(typingIndicator);
-            scrollChatbox();
+            // Function to display typing indicator
         }
 
         function hideTypingIndicator() {
-            const typingIndicator = document.querySelector(".typing-indicator");
-            if (typingIndicator) {
-                typingIndicator.remove();
-            }
-        }
-
-        function scrollChatbox() {
-            document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+            // Function to hide typing indicator
         }
 
         function getAIResponse(userInput) {
+            const lowerCaseInput = userInput.toLowerCase();
             switch (true) {
-                case userInput.toLowerCase().includes("hi") || userInput.toLowerCase().includes("hello"):
+                case lowerCaseInput.includes("hi") || lowerCaseInput.includes("hello"):
                     return "Hello, how can I assist you?";
-                case userInput.toLowerCase().includes("how are you"):
+                case lowerCaseInput.includes("how are you"):
                     return "I'm doing well, thank you for asking!";
-                case userInput.match(/what is \d+ [+\-*\/] \d+/):
+                case userInput.match(/what is \d+ [\+\-\*\/] \d+/i):
                     try {
-                        const calculation = userInput.match(/(\d+) ([+\-*\/]) (\d+)/);
+                        const calculation = userInput.match(/(\d+) ([+\-\*\/]) (\d+)/i);
                         const num1 = parseInt(calculation[1]);
                         const operator = calculation[2];
                         const num2 = parseInt(calculation[3]);
-                        let result;
-                        switch (operator) {
-                            case '+':
-                                result = num1 + num2;
-                                break;
-                            case '-':
-                                result = num1 - num2;
-                                break;
-                            case '*':
-                                result = num1 * num2;
-                                break;
-                            case '/':
-                                result = num2 !== 0 ? num1 / num2 : "undefined";
-                                break;
-                            default:
-                                result = "undefined";
-                        }
+                        const result = calculate(num1, num2, operator);
                         return result;
-                    } catch (error) {
-                        return "Sorry, I couldn't perform the calculation.";
+                    } catch (e) {
+                        return "Sorry, I couldn't understand that.";
                     }
                 default:
-                    return "I'm sorry, I didn't understand that.";
+                    return "Sorry, I can't help with that.";
             }
+        }
+
+        function calculate(num1, num2, operator) {
+            const operations = {
+                '+': (num1, num2) => num1 + num2,
+                '-': (num1, num2) => num1 - num2,
+                '*': (num1, num2) => num1 * num2,
+                '/': (num1, num2) => num2 !== 0 ? num1 / num2 : NaN,
+            };
+            const operation = operations[operator];
+            if (!operation) {
+                return "Invalid operation.";
+            }
+            const result = operation(num1, num2);
+            return isNaN(result) ? "Invalid operation." : `The result is ${result}.`;
         }
 
         function toggleDarkMode() {
             darkMode = !darkMode;
-            const modeIcon = document.getElementById("mode-icon");
-            if (darkMode) {
-                modeIcon.src = "dark-mode-icon.svg";
-                document.body.classList.add("dark-mode");
-            } else {
-                modeIcon.src = "light-mode-icon.svg";
-                document.body.classList.remove("dark-mode");
-            }
+            document.body.classList.toggle('dark-mode');
+            document.getElementById("mode-toggle").textContent = darkMode ? "Light Mode" : "Dark Mode";
         }
     </script>
 </body>
