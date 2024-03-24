@@ -6,6 +6,44 @@
     <title>Chatbot</title>
     <style>
         /* CSS styles for the chatbox */
+        #chatbox {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            height: 300px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .user-message {
+            color: #007bff;
+            text-align: right;
+        }
+
+        .bot-message {
+            color: #28a745;
+        }
+
+        .typing-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+            animation: typing-animation 1s infinite ease-in-out;
+        }
+
+        @keyframes typing-animation {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
     </style>
 </head>
 <body>
@@ -21,25 +59,33 @@
             var userInput = document.getElementById("userInput").value;
 
             // Display user message in the chatbox
-            displayMessage("You: " + userInput);
+            displayMessage("You", userInput, "user-message");
 
             // Clear input field
             document.getElementById("userInput").value = "";
 
-            // Process user input and get AI response
-            var aiResponse = getAIResponse(userInput);
+            // Simulate typing animation before bot responds
+            setTimeout(function() {
+                // Process user input and get AI response
+                var aiResponse = getAIResponse(userInput);
 
-            // Display AI response in the chatbox
-            displayMessage("AI: " + aiResponse);
+                // Display AI response in the chatbox
+                displayMessage("Bot", aiResponse, "bot-message");
+            }, 1000); // Delay before bot responds (1 second)
         }
 
-        function displayMessage(message) {
+        function displayMessage(sender, message, className) {
             // Create a new message element
             var messageElement = document.createElement("div");
-            messageElement.textContent = message;
+            messageElement.classList.add("message");
+            messageElement.classList.add(className);
+            messageElement.textContent = sender + ": " + message;
 
             // Append message to the chatbox
             document.getElementById("chatbox").appendChild(messageElement);
+
+            // Scroll to the bottom of the chatbox
+            document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
         }
 
         function getAIResponse(userInput) {
