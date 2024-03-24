@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Light mode background color */
+    color: #333; /* Text color */
+    margin: 0;
+    padding: 0;
+}
+
+#chat-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff; /* Chat container background color */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#chatbox {
+    height: 300px; /* Adjust as needed */
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Chatbox background color */
+}
+
+#userInput {
+    width: calc(100% - 75px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#sendButton {
+    width: 60px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Send button background color */
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#mode-toggle {
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #007bff; /* Mode toggle button background color */
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #333; /* Dark mode background color */
+    color: #fff; /* Dark mode text color */
+}
+
+#chat-container.dark-mode {
+    background-color: #222; /* Dark mode chat container background color */
+}
+
+#chatbox.dark-mode {
+    background-color: #444; /* Dark mode chatbox background color */
+}
+
+/* Typing indicator animation */
+@keyframes typing {
+    0% { content: "."; }
+    25% { content: ".."; }
+    50% { content: "..."; }
+    75% { content: ""; }
+}
+
+.typing-indicator::after {
+    content: ".";
+    animation: typing 1.5s infinite;
+}
