@@ -3,16 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbox</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Chatbot</title>
+    <style>
+        /* CSS styles for the chatbox */
+    </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div id="chat-box"></div>
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <button id="sendBtn">Send</button>
+    <div id="chatbox">
+        <!-- Chat messages will be displayed here -->
     </div>
-    
-    <script src="script.js"></script>
+    <input type="text" id="userInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            // Get user input
+            var userInput = document.getElementById("userInput").value;
+
+            // Display user message in the chatbox
+            displayMessage("User: " + userInput);
+
+            // TODO: Send user input to the server to get AI response
+
+            // Clear input field
+            document.getElementById("userInput").value = "";
+        }
+
+        function displayMessage(message) {
+            // Create a new message element
+            var messageElement = document.createElement("div");
+            messageElement.textContent = message;
+
+            // Append message to the chatbox
+            document.getElementById("chatbox").appendChild(messageElement);
+        }
+
+        // TODO: Function to handle AI response and display it in the chatbox
+    </script>
 </body>
 </html>
