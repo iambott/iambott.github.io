@@ -6,8 +6,12 @@
     <title>Modern Chatbot</title>
     <style>
         /* CSS styles for the chatbox */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
         #chatbox {
-            max-width: 400px;
+            max-width: 80%; /* Adjusted for desktop view */
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
@@ -22,21 +26,21 @@
             padding: 10px;
             border-radius: 10px;
             font-size: 16px;
-            max-width: 80%;
+            max-width: 90%; /* Adjusted for desktop view */
         }
 
         .user-message {
             color: #007bff;
             background-color: #e6f2ff;
             float: right;
-            animation: fadein 0.5s ease-in-out;
+            clear: both; /* Added to fix floating issue */
         }
 
         .bot-message {
             color: #28a745;
             background-color: #e6ffe6;
             float: left;
-            animation: fadein 0.5s ease-in-out;
+            clear: both; /* Added to fix floating issue */
         }
 
         .typing-indicator {
@@ -86,75 +90,48 @@
 
     <script>
         function sendMessage() {
-            // Get user input
             var userInput = document.getElementById("userInput").value;
-
-            // Display user message in the chatbox
             displayUserMessage(userInput);
-
-            // Clear input field
             document.getElementById("userInput").value = "";
 
-            // Simulate typing animation before bot responds
             setTimeout(function() {
-                // Display typing indicator
                 displayTypingIndicator();
-
-                // Process user input and get AI response
                 setTimeout(function() {
                     var aiResponse = getAIResponse(userInput);
-                    // Hide typing indicator
                     hideTypingIndicator();
-                    // Display AI response in the chatbox
                     displayBotMessage(aiResponse);
-                }, 1500); // Delay before bot responds (1.5 seconds)
-            }, 500); // Simulate typing animation delay (0.5 seconds)
+                }, 1500);
+            }, 500);
         }
 
         function displayUserMessage(message) {
-            // Create a new message element for user
             var messageElement = document.createElement("div");
             messageElement.classList.add("message");
             messageElement.classList.add("user-message");
             messageElement.textContent = "You: " + message;
-
-            // Append message to the chatbox
             document.getElementById("chatbox").appendChild(messageElement);
-
-            // Scroll to the bottom of the chatbox
             document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
         }
 
         function displayBotMessage(message) {
-            // Create a new message element for bot
             var messageElement = document.createElement("div");
             messageElement.classList.add("message");
             messageElement.classList.add("bot-message");
             messageElement.textContent = "Bot: " + message;
-
-            // Append message to the chatbox
             document.getElementById("chatbox").appendChild(messageElement);
-
-            // Scroll to the bottom of the chatbox
             document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
         }
 
         function displayTypingIndicator() {
-            // Create a new message element for typing indicator
             var typingIndicator = document.createElement("div");
             typingIndicator.classList.add("message");
             typingIndicator.classList.add("bot-message");
             typingIndicator.innerHTML = "Bot: <span class='typing-indicator'><span class='typing-dot'></span><span class='typing-dot'></span><span class='typing-dot'></span></span>";
-
-            // Append typing indicator to the chatbox
             document.getElementById("chatbox").appendChild(typingIndicator);
-
-            // Scroll to the bottom of the chatbox
             document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
         }
 
         function hideTypingIndicator() {
-            // Remove typing indicator from the chatbox
             var typingIndicator = document.querySelector(".typing-indicator");
             if (typingIndicator) {
                 typingIndicator.remove();
@@ -162,9 +139,20 @@
         }
 
         function getAIResponse(userInput) {
-            // AI logic to generate response based on user input
-            // For demo purpose, bot responds with the same message as the user
-            return "Hmm... Let me think. Oh, I meant to say: " + userInput;
+            if (userInput.toLowerCase().includes("hi") || userInput.toLowerCase().includes("hello")) {
+                return "Hello, how can I assist you?";
+            } else if (userInput.toLowerCase().includes("how are you")) {
+                return "I'm doing well, thank you for asking!";
+            } else if (userInput.match(/^[\d+*/\-\s()]+$/)) {
+                try {
+                    var result = eval(userInput);
+                    return "The result of " + userInput + " is " + result;
+                } catch (error) {
+                    return "Sorry, I couldn't calculate the result.";
+                }
+            } else {
+                return "I'm sorry, I didn't understand that.";
+            }
         }
     </script>
 </body>
