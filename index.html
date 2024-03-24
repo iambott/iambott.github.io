@@ -21,12 +21,16 @@
             var userInput = document.getElementById("userInput").value;
 
             // Display user message in the chatbox
-            displayMessage("User: " + userInput);
-
-            // TODO: Send user input to the server to get AI response
+            displayMessage("You: " + userInput);
 
             // Clear input field
             document.getElementById("userInput").value = "";
+
+            // Process user input and get AI response
+            var aiResponse = getAIResponse(userInput);
+
+            // Display AI response in the chatbox
+            displayMessage("AI: " + aiResponse);
         }
 
         function displayMessage(message) {
@@ -38,7 +42,24 @@
             document.getElementById("chatbox").appendChild(messageElement);
         }
 
-        // TODO: Function to handle AI response and display it in the chatbox
+        function getAIResponse(userInput) {
+            // AI logic to generate response based on user input
+            if (userInput.toLowerCase().includes("hi")) {
+                return "Hello, how are you?";
+            } else if (userInput.toLowerCase().includes("fine") && userInput.toLowerCase().includes("how are you")) {
+                return "I'm fine, thank you for asking!";
+            } else if (userInput.match(/^[0-9+\-*/()\s]+$/)) {
+                // If the user input is a valid mathematical expression
+                try {
+                    var result = eval(userInput); // Evaluate the expression
+                    return "The result is: " + result;
+                } catch (error) {
+                    return "Sorry, I couldn't calculate the result.";
+                }
+            } else {
+                return "I'm sorry, I don't understand.";
+            }
+        }
     </script>
 </body>
 </html>
